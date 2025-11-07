@@ -1,6 +1,9 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx'; // 支持 TSX 的核心插件
+import AutoImport from 'unplugin-auto-import/vite';
+import Components from 'unplugin-vue-components/vite';
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
 
 // @ts-expect-error process is a nodejs global
 const host = process.env.TAURI_DEV_HOST;
@@ -12,6 +15,19 @@ export default defineConfig(async () => ({
     vueJsx({
       // 可选配置：自定义 JSX 转换规则
       include: /\.(jsx|tsx)/, // 明确处理 TSX 文件
+    }),
+    // 自动导入 Vue / Router / Pinia 等常用 API，生成 types
+    AutoImport({
+      imports: ['vue', 'vue-router', 'pinia'],
+      dts: 'src/auto-imports.d.ts',
+      eslintrc: {
+        enabled: false,
+      },
+    }),
+    // 按需注册组件（示例使用 Naive UI），生成 types
+    Components({
+      resolvers: [NaiveUiResolver()],
+      dts: 'src/components.d.ts',
     }),
   ],
 
@@ -36,4 +52,12 @@ export default defineConfig(async () => ({
       ignored: ['**/src-tauri/**'],
     },
   },
+  
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler' // or 'modern', 'legacy'
+      }
+    }
+  }
 }));

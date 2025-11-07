@@ -1,0 +1,121 @@
+// SCSS Mixins
+
+// 清除浮动
+@mixin clearfix {
+  &::before,
+  &::after {
+    display: table;
+    content: '';
+  }
+  
+  &::after {
+    clear: both;
+  }
+}
+
+// 文本省略号
+@mixin text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// 多行文本省略号
+@mixin text-ellipsis-multi($lines: 2) {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+}
+
+// Flex 居中对齐
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Flex 垂直居中
+@mixin flex-align-center {
+  display: flex;
+  align-items: center;
+}
+
+// Flex 水平居中
+@mixin flex-justify-center {
+  display: flex;
+  justify-content: center;
+}
+
+// 绝对定位居中
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// 固定定位居中
+@mixin fixed-center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// 三角形
+@mixin triangle($direction: up, $size: 5px, $color: #000) {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  
+  @if $direction == up {
+    border-width: 0 $size $size $size;
+    border-color: transparent transparent $color transparent;
+  } @else if $direction == down {
+    border-width: $size $size 0 $size;
+    border-color: $color transparent transparent transparent;
+  } @else if $direction == left {
+    border-width: $size 0 $size $size;
+    border-color: transparent transparent transparent $color;
+  } @else if $direction == right {
+    border-width: $size $size $size 0;
+    border-color: transparent $color transparent transparent;
+  }
+}
+
+// 禁用状态
+@mixin disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+// 阴影
+@mixin box-shadow($level: 1) {
+  @if $level == 1 {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  } @else if $level == 2 {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  } @else if $level == 3 {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// 滚动条样式
+@mixin scrollbar($size: 6px, $color: #c1c1c1) {
+  &::-webkit-scrollbar {
+    width: $size;
+    height: $size;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: $color;
+    border-radius: $size;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}

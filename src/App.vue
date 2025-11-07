@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { invoke } from '@tauri-apps/api/core';
-import HelloFunctional from './components/HelloFunctional';
+import Layout from './layout/Layout.vue';
+import CustomButton from './components/CustomButton.vue';
 
 const greetMsg = ref('');
 const name = ref('');
@@ -13,32 +14,41 @@ async function greet() {
 </script>
 
 <template>
-  <main class="container">
-    <h1>Welcome to Tauri + Vue</h1>
-    <HelloFunctional title="Hello，世界" :count="0" />
+  <Layout>
+    <div class="container">
+      <h1>Welcome to Tauri + Vue</h1>
 
-    <div class="row">
-      <a href="https://vite.dev" target="_blank">
-        <img src="/vite.svg" class="logo vite" alt="Vite logo" />
-      </a>
-      <a href="https://tauri.app" target="_blank">
-        <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
-      </a>
-      <a href="https://vuejs.org/" target="_blank">
-        <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-      </a>
+      <div class="row">
+        <a href="https://vite.dev" target="_blank">
+          <img src="/vite.svg" class="logo vite" alt="Vite logo" />
+        </a>
+        <a href="https://tauri.app" target="_blank">
+          <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
+        </a>
+        <a href="https://vuejs.org/" target="_blank">
+          <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
+        </a>
+      </div>
+      <p>Click on the Tauri, Vite, and Vue logos to learn more.</p>
+
+      <form class="row" @submit.prevent="greet">
+        <input id="greet-input" v-model="name" placeholder="Enter a name..." />
+        <CustomButton type="submit">Greet</CustomButton>
+      </form>
+      
+      <div class="button-demo">
+        <CustomButton>Primary Button</CustomButton>
+        <CustomButton secondary>Secondary Button</CustomButton>
+        <CustomButton danger>Danger Button</CustomButton>
+        <CustomButton disabled>Disabled Button</CustomButton>
+      </div>
+      
+      <p>{{ greetMsg }}</p>
     </div>
-    <p>Click on the Tauri, Vite, and Vue logos to learn more.</p>
-
-    <form class="row" @submit.prevent="greet">
-      <input id="greet-input" v-model="name" placeholder="Enter a name..." />
-      <button type="submit">Greet</button>
-    </form>
-    <p>{{ greetMsg }}</p>
-  </main>
+  </Layout>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .logo.vite:hover {
   filter: drop-shadow(0 0 2em #747bff);
 }
@@ -46,8 +56,16 @@ async function greet() {
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #249b73);
 }
+
+.button-demo {
+  margin: 20px 0;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 </style>
-<style>
+
+<style lang="scss">
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
