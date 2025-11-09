@@ -5,6 +5,7 @@ import LodashDemo from '../pages/lodash-demo.vue';
 import UtilsDemo from '../pages/utils-demo.vue';
 import ValidatorDemo from '../pages/validator-demo.vue';
 import StorageDemo from '../pages/storage-demo.vue';
+import PermissionDemo from '../pages/permission-demo.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -36,6 +37,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/storage',
     name: 'StorageDemo',
     component: StorageDemo,
+  },
+  {
+    path: '/permission',
+    name: 'PermissionDemo',
+    component: PermissionDemo,
   },
 ];
 

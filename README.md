@@ -6,6 +6,35 @@ This template should help get you started developing with Vue 3 and TypeScript i
 
 - [VS Code](https://code.visualstudio.com/) + [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
 
+## Path Alias
+
+This project uses path alias configuration to simplify imports:
+
+- `@` maps to the `src` directory
+- Example: `import { usePermissionStore } from '@/store/permission'`
+
+See [PATH_ALIAS.md](./PATH_ALIAS.md) for detailed configuration instructions.
+
+## Environment Configuration
+
+This project supports environment-based configuration through `.env` files:
+
+- `.env` - Default environment variables
+- `.env.development` - Development environment variables
+- `.env.production` - Production environment variables
+
+### Permission System Configuration
+
+The permission system can be enabled/disabled via environment variables:
+
+```env
+VITE_PERMISSION_ENABLED=true
+```
+
+Set to `false` to disable the permission system (all permissions will be granted).
+
+See [PERMISSION_CONFIG.md](./PERMISSION_CONFIG.md) for detailed configuration instructions.
+
 ## Testing
 
 This project uses [Vitest](https://vitest.dev/) for unit testing.

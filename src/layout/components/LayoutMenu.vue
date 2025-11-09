@@ -1,108 +1,139 @@
 <script setup lang="ts">
-import { Menu } from 'ant-design-vue'
-import type { MenuItem } from '../../types/layout'
-import { h } from 'vue'
-import * as antIcons from '@ant-design/icons-vue'
-import { useAppStore } from '../../store/app'
+import { computed } from 'vue'
+import { useMenuStore } from '@/store/menu'
+import { useRouter, useRoute } from 'vue-router'
+import type { MenuItem } from '@/types/layout'
+import { 
+  HomeOutlined, 
+  SettingOutlined, 
+  DatabaseOutlined,
+  ToolOutlined,
+  CheckCircleOutlined,
+  SaveOutlined,
+  SafetyCertificateOutlined,
+  ExperimentOutlined
+} from '@ant-design/icons-vue'
 
-interface Props {
-  menuList?: MenuItem[]
-  collapsed?: boolean
+// 使用 store 和 router
+const menuStore = useMenuStore()
+const router = useRouter()
+const route = useRoute()
+
+// 定义菜单数据
+const menuData = computed<MenuItem[]>(() => [
+  {
+    key: 'home',
+    title: '首页',
+    icon: HomeOutlined
+  },
+  {
+    key: 'settings',
+    title: '系统设置',
+    icon: SettingOutlined
+  },
+  {
+    key: 'utils',
+    title: '工具演示',
+    icon: ToolOutlined,
+    children: [
+      {
+        key: 'lodash',
+        title: 'Lodash 工具'
+      },
+      {
+        key: 'utils',
+        title: '常用工具'
+      },
+      {
+        key: 'validator',
+        title: '验证工具'
+      },
+      {
+        key: 'storage',
+        title: '存储工具'
+      },
+      {
+        key: 'permission',
+        title: '权限系统',
+        icon: SafetyCertificateOutlined
+      },
+      {
+        key: 'alias-test',
+        title: '路径别名测试',
+        icon: ExperimentOutlined
+      }
+    ]
+  },
+  {
+    key: 'data',
+    title: '数据管理',
+    icon: DatabaseOutlined,
+    children: [
+      {
+        key: 'data-list',
+        title: '数据列表'
+      },
+      {
+        key: 'data-analysis',
+        title: '数据分析'
+      }
+    ]
+  }
+])
+
+// 设置菜单列表
+menuStore.setMenuList(menuData.value)
+
+// 处理菜单点击
+const handleMenuClick = ({ key }: { key: string }) => {
+  menuStore.setActiveMenuKey(key)
+  router.push({ name: getKeyToRouteMap()[key] || 'Home' })
 }
 
-withDefaults(defineProps<Props>(), {
-  menuList: () => [],
-  collapsed: false
+// 菜单 key 到路由 name 的映射
+const getKeyToRouteMap = () => ({
+  home: 'Home',
+  settings: 'Settings',
+  lodash: 'LodashDemo',
+  utils: 'UtilsDemo',
+  validator: 'ValidatorDemo',
+  storage: 'StorageDemo',
+  permission: 'PermissionDemo',
+  'alias-test': 'AliasTest',
+  'data-list': 'DataList',
+  'data-analysis': 'DataAnalysis'
 })
 
-const appStore = useAppStore()
+// 计算激活的菜单 key
+const selectedKeys = computed(() => [menuStore.getActiveMenuKey || route.name || 'home'])
 
-const emit = defineEmits<{
-  (e: 'click', item: any): void
-}>()
-
-const handleClick = (item: any) => {
-  console.log('Menu item clicked:', item)
-  emit('click', item)
-}
-
-// 渲染图标
-const renderIcon = (icon?: string | any) => {
-  if (!icon) return null
-  
-  if (typeof icon === 'string' && Object.keys(antIcons).includes(icon)) {
-    const IconComponent = (antIcons as any)[icon]
-    return h(IconComponent)
-  }
-  
-  if (typeof icon === 'object') {
-    return h(icon)
-  }
-  
-  return null
-}
+// 计算展开的菜单 keys
+const openKeys = computed(() => menuStore.getOpenKeys)
 </script>
 
 <template>
-  <Menu
+  <a-menu
+    v-model:selectedKeys="selectedKeys"
+    v-model:openKeys="openKeys"
     mode="inline"
-    :theme="appStore.getTheme"
-    :inline-collapsed="collapsed"
-    @click="({ key }) => {
-      // 找到被点击的菜单项
-      const findMenuItem = (items: MenuItem[]): MenuItem | null => {
-        for (const item of items) {
-          if (item.key === key) {
-            return item
-          }
-          if (item.children) {
-            const found = findMenuItem(item.children)
-            if (found) {
-              return found
-            }
-          }
-        }
-        return null
-      }
-      
-      const menuItem = findMenuItem(menuList)
-      if (menuItem) {
-        handleClick(menuItem)
-      }
-    }"
+    theme="dark"
+    @click="handleMenuClick"
   >
-    <template v-for="item in menuList" :key="item.key">
-      <Menu.Item v-if="!item.children || item.children.length === 0" :key="item.key">
-        <template #icon>
-          <component :is="renderIcon(item.icon)" />
+    <template v-for="item in menuData" :key="item.key">
+      <a-sub-menu v-if="item.children" :key="item.key">
+        <template #title>
+          <component v-if="item.icon" :is="item.icon" />
+          <span>{{ item.title }}</span>
         </template>
-        <span>{{ item.title }}</span>
-      </Menu.Item>
-      
-      <Menu.SubMenu v-else :key="item.key" :title="item.title">
-        <template #icon>
-          <component :is="renderIcon(item.icon)" />
-        </template>
-        <Menu.Item 
-          v-for="child in item.children" 
-          :key="child.key"
-        >
+        <a-menu-item v-for="child in item.children" :key="child.key">
+          <component v-if="child.icon" :is="child.icon" />
           <span>{{ child.title }}</span>
-        </Menu.Item>
-      </Menu.SubMenu>
+        </a-menu-item>
+      </a-sub-menu>
+      <a-menu-item v-else :key="item.key">
+        <component v-if="item.icon" :is="item.icon" />
+        <span>{{ item.title }}</span>
+      </a-menu-item>
     </template>
-  </Menu>
+  </a-menu>
 </template>
-
-<style scoped>
-/* 在这里添加一些额外的样式调整，确保在新拟物风格下有更好的表现 */
-:deep(.ant-menu-item .ant-menu-title-content) {
-  flex: 1;
-  transition: all 0.3s ease;
-}
-
-:deep(.ant-menu-submenu-title .ant-menu-title-content) {
-  flex: 1;
-  transition: all 0.3s ease;
-}
-</style>

@@ -5,17 +5,17 @@ import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
 import UnoCSS from 'unocss/vite';
+import { resolve } from 'path';
 
-// @ts-expect-error process is a nodejs global
 const host = process.env.TAURI_DEV_HOST;
 
 // https://vite.dev/config/
-export default defineConfig(async () => ({
+export default defineConfig({
   plugins: [
     vue(),
     vueJsx({
       // 可选配置：自定义 JSX 转换规则
-      include: /\.(jsx|tsx)/, // 明确处理 TSX 文件
+      include: /\.(jsx|tsx)$/, // 明确处理 TSX 文件
     }),
     // 自动导入 Vue / Router / Pinia 等常用 API，生成 types
     AutoImport({
@@ -55,12 +55,18 @@ export default defineConfig(async () => ({
       ignored: ['**/src-tauri/**'],
     },
   },
-  
+
   css: {
     preprocessorOptions: {
       scss: {
-        api: 'modern-compiler' // or 'modern', 'legacy'
-      }
-    }
-  }
-}));
+        api: 'modern-compiler', // or 'modern', 'legacy'
+      },
+    },
+  },
+
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src'),
+    },
+  },
+});

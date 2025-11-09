@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import type { UserInfo } from '../types/api';
 import type { StoreActionResult } from './types';
 import { logUtils } from '../utils/logUtils';
-import UserService from '../services/request.ts';
+import UserService from '../services/user.ts';
 
 // 定义状态类型
 interface UserState {
@@ -17,7 +17,7 @@ const initialState = (): UserState => ({
   userInfo: null,
   token: localStorage.getItem('access_token') || null,
   isLogin: false,
-  loading: false
+  loading: false,
 });
 
 export const useUserStore = defineStore('user', {
@@ -61,11 +61,11 @@ export const useUserStore = defineStore('user', {
           logUtils.info('[User Store] 登录成功').then();
           return { success: true, data: response.data };
         } else {
-          logUtils.error('[User Store] 登录失败:', response.message);
+          logUtils.error('[User Store] 登录失败:', response.message).then();
           return { success: false, message: response.message };
         }
       } catch (error) {
-        logUtils.error('[User Store] 登录异常:');
+        logUtils.error('[User Store] 登录异常:').then();
         return { success: false, message: '登录异常' };
       } finally {
         this.loading = false;
@@ -77,7 +77,7 @@ export const useUserStore = defineStore('user', {
      */
     async fetchUserInfo(): Promise<StoreActionResult<UserInfo>> {
       if (!this.token) {
-        logUtils.warn('[User Store] 未登录，无法获取用户信息');
+        logUtils.warn('[User Store] 未登录，无法获取用户信息').then();
         return { success: false, message: '未登录' };
       }
 
@@ -90,11 +90,11 @@ export const useUserStore = defineStore('user', {
           logUtils.info('[User Store] 获取用户信息成功').then();
           return { success: true, data: response.data };
         } else {
-          logUtils.error('[User Store] 获取用户信息失败:', response.message);
+          logUtils.error('[User Store] 获取用户信息失败:', response.message).then();
           return { success: false, message: response.message };
         }
       } catch (error) {
-        logUtils.error('[User Store] 获取用户信息异常:', error);
+        logUtils.error('[User Store] 获取用户信息异常:', error).then();
         return { success: false, message: '获取用户信息异常' };
       } finally {
         this.loading = false;
@@ -112,7 +112,7 @@ export const useUserStore = defineStore('user', {
       // 清除 localStorage 中的 token
       localStorage.removeItem('access_token');
 
-      logUtils.info('[User Store] 用户已登出');
+      logUtils.info('[User Store] 用户已登出').then();
     },
 
     /**
@@ -121,7 +121,7 @@ export const useUserStore = defineStore('user', {
      */
     updateUserInfo(userInfo: UserInfo) {
       this.userInfo = { ...this.userInfo, ...userInfo };
-      logUtils.info('[User Store] 用户信息已更新');
+      logUtils.info('[User Store] 用户信息已更新').then();
     },
 
     /**

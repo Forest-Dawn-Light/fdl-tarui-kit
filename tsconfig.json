@@ -16,6 +16,12 @@
     "jsxImportSource": "vue", // 指定 Vue 作为 JSX 导入源
     "types": ["vue", "vitest/globals"],
 
+    /* Path mapping */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,

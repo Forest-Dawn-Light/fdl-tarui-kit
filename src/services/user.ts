@@ -49,6 +49,11 @@ class UserService {
   static async deleteUser(id: number): Promise<BaseResponse<null>> {
     return axiosUtils.delete(`/user/delete/${id}`);
   }
+
+  // 获取用户权限列表接口
+  static async getUserPermissions(): Promise<BaseResponse<string[]>> {
+    return axiosUtils.get('/api/user/permissions');
+  }
 }
 
 export default UserService;

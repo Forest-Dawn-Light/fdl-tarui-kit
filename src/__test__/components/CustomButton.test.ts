@@ -23,7 +23,8 @@ describe('CustomButton', () => {
       }
     })
     
-    expect(wrapper.props('secondary')).toBe(true)
+    // 检查 HTML 中是否包含 secondary 类
+    expect(wrapper.html()).toContain('secondary')
   })
 
   it('should apply danger prop when danger prop is true', () => {
@@ -36,7 +37,8 @@ describe('CustomButton', () => {
       }
     })
     
-    expect(wrapper.props('danger')).toBe(true)
+    // 检查 HTML 中是否包含 danger 类
+    expect(wrapper.html()).toContain('danger')
   })
 
   it('should apply disabled prop when disabled prop is true', () => {
@@ -49,6 +51,7 @@ describe('CustomButton', () => {
       }
     })
     
-    expect(wrapper.props('disabled')).toBe(true)
+    // 检查 HTML 中是否包含 disabled 类
+    expect(wrapper.html()).toContain('disabled')
   })
 })
