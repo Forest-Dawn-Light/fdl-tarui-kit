@@ -1,0 +1,307 @@
+// 新拟物风格 (Neumorphism) 主题
+// 特点：柔和的阴影，看起来像按钮从背景中"挤出"
+
+:root[data-theme='neumorphism'] {
+  // 主色调
+  --primary-color: #4a6cf7;
+  --primary-color-hover: #3a5ce5;
+  --primary-color-active: #3a5ce5;
+  --success-color: #6fcf97;
+  --warning-color: #f2c94c;
+  --error-color: #eb5757;
+  --info-color: #56c3f0;
+  
+  // 中性色
+  --heading-color: #333333;
+  --text-color: #4f4f4f;
+  --text-color-secondary: #828282;
+  --disabled-color: #bdbdbd;
+  --border-color: #e0e0e0;
+  --border-color-split: #f0f0f0;
+  --background-color: #e0e0e0;
+  --background-color-light: #eeeeee;
+  --component-background: #e0e0e0;
+  
+  // 阴影效果 - 新拟物风格的关键
+  --neu-shadow-inset: inset 6px 6px 12px #c5c5c5, inset -6px -6px 12px #fbfbfb;
+  --neu-shadow-outset-light: 6px 6px 12px #c5c5c5, -6px -6px 12px #fbfbfb;
+  --neu-shadow-outset-heavy: 8px 8px 16px #b8b8b8, -8px -8px 16px #ffffff;
+  
+  // 圆角 - 更圆润
+  --border-radius-base: 16px;
+  --border-radius-sm: 8px;
+  
+  // 字体
+  --font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+// 组件样式适配
+[data-theme='neumorphism'] {
+  // 按钮样式
+  .custom-button {
+    background: var(--component-background);
+    border: none;
+    box-shadow: var(--neu-shadow-outset-light);
+    border-radius: var(--border-radius-base);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      box-shadow: var(--neu-shadow-outset-heavy);
+      color: var(--primary-color-hover);
+    }
+    
+    &:active, &.active {
+      box-shadow: var(--neu-shadow-inset);
+    }
+    
+    &.primary {
+      background: var(--component-background);
+      color: var(--primary-color);
+      box-shadow: var(--neu-shadow-outset-light);
+      
+      &:hover {
+        box-shadow: var(--neu-shadow-outset-heavy);
+        color: var(--primary-color-hover);
+      }
+      
+      &:active {
+        box-shadow: var(--neu-shadow-inset);
+      }
+    }
+    
+    &.secondary {
+      background: var(--component-background);
+      color: var(--text-color);
+      box-shadow: var(--neu-shadow-outset-light);
+      
+      &:hover {
+        box-shadow: var(--neu-shadow-outset-heavy);
+      }
+      
+      &:active {
+        box-shadow: var(--neu-shadow-inset);
+      }
+    }
+    
+    &.danger {
+      background: var(--component-background);
+      color: var(--error-color);
+      box-shadow: var(--neu-shadow-outset-light);
+      
+      &:hover {
+        box-shadow: var(--neu-shadow-outset-heavy);
+      }
+      
+      &:active {
+        box-shadow: var(--neu-shadow-inset);
+      }
+    }
+  }
+  
+  // 卡片样式
+  .custom-card {
+    background: var(--component-background);
+    border-radius: var(--border-radius-base);
+    box-shadow: var(--neu-shadow-outset-light);
+    padding: var(--padding-md);
+    margin-bottom: var(--margin-md);
+    
+    .card-header {
+      border-bottom: none;
+      padding-bottom: var(--padding-sm);
+      margin-bottom: var(--padding-sm);
+      
+      h3 {
+        margin: 0;
+        color: var(--heading-color);
+      }
+    }
+    
+    .card-body {
+      color: var(--text-color);
+    }
+  }
+  
+  // 表单元素
+  .custom-form {
+    .form-item {
+      margin-bottom: var(--margin-md);
+      
+      label {
+        display: block;
+        margin-bottom: var(--margin-xs);
+        color: var(--heading-color);
+        font-weight: 500;
+      }
+      
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: var(--padding-xs) var(--padding-sm);
+        border: none;
+        border-radius: var(--border-radius-sm);
+        background: var(--component-background);
+        color: var(--text-color);
+        font-size: var(--font-size-base);
+        box-shadow: var(--neu-shadow-inset);
+        transition: all 0.3s ease;
+        
+        &:focus {
+          outline: none;
+          box-shadow: var(--neu-shadow-inset);
+        }
+        
+        &::placeholder {
+          color: var(--text-color-secondary);
+        }
+      }
+      
+      textarea {
+        min-height: 80px;
+        resize: vertical;
+      }
+    }
+  }
+  
+  // 表格样式
+  .custom-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--component-background);
+    border-radius: var(--border-radius-base);
+    box-shadow: var(--neu-shadow-outset-light);
+    
+    th,
+    td {
+      padding: var(--padding-sm) var(--padding-md);
+      text-align: left;
+      border: none;
+    }
+    
+    th {
+      background-color: transparent;
+      font-weight: 500;
+      color: var(--heading-color);
+    }
+    
+    tr {
+      &:hover {
+        background-color: transparent;
+        td {
+          background-color: rgba(255, 255, 255, 0.3);
+        }
+      }
+    }
+  }
+  
+  // 弹窗样式
+  .custom-modal {
+    .modal-content {
+      background: var(--component-background);
+      border-radius: var(--border-radius-base);
+      box-shadow: var(--neu-shadow-outset-heavy);
+      
+      .modal-header {
+        border-bottom: none;
+        padding: var(--padding-md);
+        
+        h4 {
+          margin: 0;
+          color: var(--heading-color);
+        }
+      }
+      
+      .modal-body {
+        padding: var(--padding-md);
+      }
+      
+      .modal-footer {
+        border-top: none;
+        padding: var(--padding-md);
+      }
+    }
+  }
+  
+  // 菜单样式
+  .ant-menu {
+    background: transparent !important;
+    border: none !important;
+    
+    .ant-menu-item {
+      box-shadow: var(--neu-shadow-outset-light);
+      border-radius: var(--border-radius-sm);
+      margin: 8px 12px;  // 增加外边距，减少密集感
+      color: var(--text-color);
+      height: 48px;  // 增加高度
+      line-height: 48px;  // 调整行高
+      display: flex;
+      align-items: center;
+      
+      &.ant-menu-item-selected {
+        box-shadow: var(--neu-shadow-inset);
+        color: var(--primary-color);
+        
+        &:hover {
+          color: var(--primary-color);
+        }
+      }
+      
+      &:hover {
+        color: var(--primary-color-hover);
+      }
+    }
+    
+    .ant-menu-submenu-title {
+      box-shadow: var(--neu-shadow-outset-light);
+      border-radius: var(--border-radius-sm);
+      margin: 8px 12px;  // 增加外边距
+      color: var(--text-color);
+      height: 48px;  // 增加高度
+      line-height: 48px;  // 调整行高
+      display: flex;
+      align-items: center;
+      
+      &:hover {
+        color: var(--primary-color-hover);
+      }
+    }
+    
+    // 子菜单项
+    .ant-menu-submenu-popup {
+      .ant-menu-item {
+        box-shadow: none;
+        margin: 0;
+        border-radius: 0;
+        height: 40px;  // 子菜单项稍小一些
+        line-height: 40px;
+        
+        &.ant-menu-item-selected {
+          background-color: rgba($color: #4a6cf7, $alpha: 0.1);
+          box-shadow: none;
+        }
+      }
+    }
+    
+    // 折叠状态下的菜单项
+    &.ant-menu-inline-collapsed {
+      .ant-menu-item,
+      .ant-menu-submenu-title {
+        margin: 8px 10px;  // 折叠状态下适当调整边距
+        height: 48px;
+        line-height: 48px;
+      }
+    }
+  }
+  
+  .ant-layout-sider {
+    background: var(--background-color) !important;
+  }
+  
+  .ant-layout-header {
+    background: var(--background-color) !important;
+    box-shadow: var(--neu-shadow-outset-light);
+  }
+}

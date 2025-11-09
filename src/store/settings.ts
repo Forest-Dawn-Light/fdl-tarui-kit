@@ -4,7 +4,7 @@ import type { StoreActionResult } from './types'
 // 定义设置状态类型
 interface SettingsState {
   // 外观设置
-  theme: 'light' | 'dark' | 'auto'
+  theme: 'light' | 'dark' | 'auto' | 'neumorphism' | 'ghibli'
   language: string
   fontSize: 'small' | 'medium' | 'large'
   
@@ -70,7 +70,7 @@ export const useSettingsStore = defineStore('settings', {
   
   getters: {
     // 获取主题设置
-    getTheme: (state): 'light' | 'dark' | 'auto' => state.theme,
+    getTheme: (state): 'light' | 'dark' | 'auto' | 'neumorphism' | 'ghibli' => state.theme,
     
     // 获取语言设置
     getLanguage: (state): string => state.language,
@@ -99,7 +99,7 @@ export const useSettingsStore = defineStore('settings', {
      * 更新主题设置
      * @param theme 主题
      */
-    setTheme(theme: 'light' | 'dark' | 'auto'): StoreActionResult {
+    setTheme(theme: 'light' | 'dark' | 'auto' | 'neumorphism' | 'ghibli'): StoreActionResult {
       this.theme = theme
       return { success: true }
     },

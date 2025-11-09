@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { useSettingsStore } from './settings';
 
 // 定义状态类型
 interface AppState {
@@ -55,7 +56,12 @@ export const useAppStore = defineStore('app', {
      * 切换主题
      */
     toggleTheme() {
-      this.theme = this.theme === 'light' ? 'dark' : 'light';
+      const settingsStore = useSettingsStore();
+      const themes = ['light', 'dark', 'neumorphism', 'ghibli'];
+      const currentIndex = themes.indexOf(settingsStore.getTheme);
+      const nextIndex = (currentIndex + 1) % themes.length;
+      settingsStore.setTheme(themes[nextIndex] as any);
+      this.syncAppThemeWithSettings();
     },
 
     /**
@@ -64,6 +70,19 @@ export const useAppStore = defineStore('app', {
      */
     setTheme(theme: 'light' | 'dark') {
       this.theme = theme;
+    },
+
+    /**
+     * 同步应用主题与设置存储
+     */
+    syncAppThemeWithSettings() {
+      const settingsStore = useSettingsStore();
+      if (settingsStore.getTheme === 'light' || settingsStore.getTheme === 'dark') {
+        this.theme = settingsStore.getTheme;
+      } else {
+        // 对于自定义主题，我们保持为light以确保Ant Design组件正常工作
+        this.theme = 'light';
+      }
     },
 
     /**

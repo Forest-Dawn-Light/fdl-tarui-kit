@@ -17,7 +17,7 @@ const initialState = (): UserState => ({
   userInfo: null,
   token: localStorage.getItem('access_token') || null,
   isLogin: false,
-  loading: false,
+  loading: false
 });
 
 export const useUserStore = defineStore('user', {
@@ -25,7 +25,7 @@ export const useUserStore = defineStore('user', {
 
   getters: {
     // 获取用户信息
-    getUserInfo: (state): UserInfo | null => state.userInfo,
+    getUserInfoState: (state): UserInfo | null => state.userInfo,
 
     // 获取登录状态
     getIsLogin: (state): boolean => state.isLogin,
@@ -75,7 +75,7 @@ export const useUserStore = defineStore('user', {
     /**
      * 获取用户信息
      */
-    async getUserInfo(): Promise<StoreActionResult<UserInfo>> {
+    async fetchUserInfo(): Promise<StoreActionResult<UserInfo>> {
       if (!this.token) {
         logUtils.warn('[User Store] 未登录，无法获取用户信息');
         return { success: false, message: '未登录' };

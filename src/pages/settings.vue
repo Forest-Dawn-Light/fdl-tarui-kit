@@ -14,6 +14,8 @@
           <a-select-option value="light">浅色主题</a-select-option>
           <a-select-option value="dark">深色主题</a-select-option>
           <a-select-option value="auto">自动</a-select-option>
+          <a-select-option value="neumorphism">新拟物风格</a-select-option>
+          <a-select-option value="ghibli">吉卜力风格</a-select-option>
         </a-select>
       </div>
       
@@ -169,7 +171,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, watch } from 'vue'
 import { useSettingsStore } from '../store/settings'
 import { message } from 'ant-design-vue'
 
@@ -178,7 +180,26 @@ const settingsStore = useSettingsStore()
 // 组件挂载时加载设置
 onMounted(() => {
   settingsStore.loadSettings()
+  applyTheme(settingsStore.getTheme)
 })
+
+// 监听主题变化
+watch(() => settingsStore.getTheme, (newTheme) => {
+  applyTheme(newTheme)
+})
+
+// 应用主题
+const applyTheme = (theme: string) => {
+  // 移除所有主题类
+  document.documentElement.removeAttribute('data-theme')
+  
+  // 应用新主题
+  if (theme !== 'light' && theme !== 'dark' && theme !== 'auto') {
+    document.documentElement.setAttribute('data-theme', theme)
+  }
+  
+  // 对于 light/dark/auto 主题，我们依赖 ant-design 的默认实现
+}
 
 // 保存设置
 const saveSettings = () => {
@@ -194,6 +215,7 @@ const saveSettings = () => {
 const resetSettings = () => {
   settingsStore.resetSettings()
   message.info('设置已重置')
+  applyTheme(settingsStore.getTheme)
 }
 </script>
 

@@ -4,6 +4,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'; // 支持 TSX 的核心插件
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
+import UnoCSS from 'unocss/vite';
 
 // @ts-expect-error process is a nodejs global
 const host = process.env.TAURI_DEV_HOST;
@@ -29,6 +30,8 @@ export default defineConfig(async () => ({
       resolvers: [NaiveUiResolver()],
       dts: 'src/components.d.ts',
     }),
+    // 添加 UnoCSS 插件
+    UnoCSS(),
   ],
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
@@ -37,14 +40,14 @@ export default defineConfig(async () => ({
   clearScreen: false,
   // 2. tauri expects a fixed port, fail if that port is not available
   server: {
-    port: 1420,
+    port: 3000,
     strictPort: true,
     host: host || false,
     hmr: host
       ? {
           protocol: 'ws',
           host,
-          port: 1421,
+          port: 3001,
         }
       : undefined,
     watch: {

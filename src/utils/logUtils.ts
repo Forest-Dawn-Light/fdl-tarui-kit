@@ -1,6 +1,45 @@
-import { trace, info, debug, warn, error, attachConsole } from '@tauri-apps/plugin-log';
+// 检查是否在Tauri环境中运行
+const isTauri = typeof window !== 'undefined' && (window as any).__TAURI__;
 
-attachConsole().then();
+let traceFn: (message: string) => Promise<void>;
+let infoFn: (message: string) => Promise<void>;
+let debugFn: (message: string) => Promise<void>;
+let warnFn: (message: string) => Promise<void>;
+let errorFn: (message: string) => Promise<void>;
+let attachConsoleFn: () => Promise<void>;
+
+if (isTauri) {
+  import('@tauri-apps/plugin-log').then((log) => {
+    traceFn = log.trace;
+    infoFn = log.info;
+    debugFn = log.debug;
+    warnFn = log.warn;
+    errorFn = log.error;
+    attachConsoleFn = log.attachConsole;
+    
+    // 尝试附加控制台
+    attachConsoleFn().catch((err) => {
+      console.warn('Failed to attach Tauri console:', err);
+    });
+  }).catch((err) => {
+    console.warn('Failed to load Tauri log plugin:', err);
+    // Fallback to console
+    traceFn = (message: string) => Promise.resolve(console.log(`[TRACE] ${message}`));
+    infoFn = (message: string) => Promise.resolve(console.info(`[INFO] ${message}`));
+    debugFn = (message: string) => Promise.resolve(console.debug(`[DEBUG] ${message}`));
+    warnFn = (message: string) => Promise.resolve(console.warn(`[WARN] ${message}`));
+    errorFn = (message: string) => Promise.resolve(console.error(`[ERROR] ${message}`));
+    attachConsoleFn = () => Promise.resolve();
+  });
+} else {
+  // 在浏览器环境中使用console
+  traceFn = (message: string) => Promise.resolve(console.log(`[TRACE] ${message}`));
+  infoFn = (message: string) => Promise.resolve(console.info(`[INFO] ${message}`));
+  debugFn = (message: string) => Promise.resolve(console.debug(`[DEBUG] ${message}`));
+  warnFn = (message: string) => Promise.resolve(console.warn(`[WARN] ${message}`));
+  errorFn = (message: string) => Promise.resolve(console.error(`[ERROR] ${message}`));
+  attachConsoleFn = () => Promise.resolve();
+}
 
 /**
  * 将模板字符串和参数组合成最终的字符串
@@ -51,27 +90,47 @@ const formatLogTemplate = (template: string, ...args: unknown[]): string => {
 class LogUtils {
   public async log(message: string, ...params: unknown[]) {
     const messageWithParams = formatLogTemplate(message, params);
-    await trace(messageWithParams);
+    if (traceFn) {
+      await traceFn(messageWithParams);
+    } else {
+      console.log(`[TRACE] ${messageWithParams}`);
+    }
   }
 
   public async info(message: string, ...params: unknown[]) {
     const messageWithParams = formatLogTemplate(message, params);
-    await info(messageWithParams);
+    if (infoFn) {
+      await infoFn(messageWithParams);
+    } else {
+      console.info(`[INFO] ${messageWithParams}`);
+    }
   }
 
   public async error(message: string, ...params: unknown[]) {
     const messageWithParams = formatLogTemplate(message, params);
-    await error(messageWithParams);
+    if (errorFn) {
+      await errorFn(messageWithParams);
+    } else {
+      console.error(`[ERROR] ${messageWithParams}`);
+    }
   }
 
   public async debug(message: string, ...params: unknown[]) {
     const messageWithParams = formatLogTemplate(message, params);
-    await debug(messageWithParams);
+    if (debugFn) {
+      await debugFn(messageWithParams);
+    } else {
+      console.debug(`[DEBUG] ${messageWithParams}`);
+    }
   }
 
   public async warn(message: string, ...params: unknown[]) {
     const messageWithParams = formatLogTemplate(message, params);
-    await warn(messageWithParams);
+    if (warnFn) {
+      await warnFn(messageWithParams);
+    } else {
+      console.warn(`[WARN] ${messageWithParams}`);
+    }
   }
 }
 

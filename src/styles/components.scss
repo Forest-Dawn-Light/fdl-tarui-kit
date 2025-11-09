@@ -1,4 +1,5 @@
 // 组件级别的 SCSS 样式
+@use 'mixins' as *;
 
 // 按钮样式
 .custom-button {

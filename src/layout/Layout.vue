@@ -7,10 +7,12 @@ import LayoutMenu from './components/LayoutMenu.vue'
 import { DashboardOutlined, SettingOutlined, ToolOutlined, DatabaseOutlined } from '@ant-design/icons-vue'
 import { useAppStore } from '../store/app'
 import { useMenuStore } from '../store/menu'
+import { useRouter } from 'vue-router'
 
 // 使用 store
 const appStore = useAppStore()
 const menuStore = useMenuStore()
+const router = useRouter()
 
 // 定义菜单数据
 const menuList = reactive([
@@ -34,8 +36,7 @@ const menuList = reactive([
       },
       {
         key: 'settings',
-        title: '系统设置',
-        icon: ToolOutlined
+        title: '系统设置'
       }
     ]
   },
@@ -48,6 +49,21 @@ const menuList = reactive([
         key: 'storage',
         title: '存储工具',
         icon: DatabaseOutlined
+      },
+      {
+        key: 'lodash',
+        title: 'Lodash 工具',
+        icon: DatabaseOutlined
+      },
+      {
+        key: 'utils',
+        title: '通用工具',
+        icon: DatabaseOutlined
+      },
+      {
+        key: 'validator',
+        title: '验证工具',
+        icon: DatabaseOutlined
       }
     ]
   }
@@ -55,16 +71,42 @@ const menuList = reactive([
 
 // 设置菜单列表到 store
 onMounted(() => {
-  menuStore.setMenuList(menuList)
+  menuStore.setMenuList(menuList);
+  console.log('菜单列表:', menuList);
 })
 
 const handleMenuClick = (item: any) => {
   console.log('点击菜单项:', item)
   menuStore.setActiveMenuKey(item.key)
+  
+  // 根据菜单项导航到对应页面
+  switch (item.key) {
+    case 'dashboard':
+      router.push('/')
+      break
+    case 'settings':
+      router.push('/settings')
+      break
+    case 'lodash':
+      router.push('/lodash')
+      break
+    case 'utils':
+      router.push('/utils')
+      break
+    case 'validator':
+      router.push('/validator')
+      break
+    default:
+      // 处理子菜单项
+      if (item.key) {
+        router.push(`/${item.key}`)
+      }
+      console.log('未找到对应的路由:', item.key)
+  }
 }
 
 const layoutMainClass = computed(() => {
-  return ['layout-main', { collapsed: appStore.getSiderCollapsed }]
+  return ['layout-main', { collapsed: appStore.collapsed }]
 })
 </script>
 
@@ -75,16 +117,17 @@ const layoutMainClass = computed(() => {
       :trigger="null" 
       collapsible 
       width="256"
+      :theme="appStore.getTheme"
       class="layout-sider"
     >
       <div class="logo">
-        <h1 v-if="!appStore.getSiderCollapsed">FDL管理系统</h1>
+        <h1 v-if="!appStore.collapsed">FDL管理系统</h1>
         <h1 v-else>FDL</h1>
       </div>
       <div class="layout-menu">
         <LayoutMenu 
           :menu-list="menuStore.getMenuList" 
-          :collapsed="appStore.getSiderCollapsed" 
+          :collapsed="appStore.collapsed" 
           @click="handleMenuClick" 
         />
       </div>
@@ -95,7 +138,7 @@ const layoutMainClass = computed(() => {
       
       <LayoutContent class="layout-content">
         <div class="content-wrapper">
-          <slot></slot>
+          <router-view />
         </div>
       </LayoutContent>
       
@@ -160,5 +203,13 @@ const layoutMainClass = computed(() => {
   padding: 24px;
   background: #fff;
   min-height: 360px;
+}
+/* 使用 UnoCSS 类 */
+.flex-center {
+  @apply flex items-center justify-center;
+}
+
+.text-primary {
+  @apply text-[#1890ff];
 }
 </style>

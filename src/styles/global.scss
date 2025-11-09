@@ -1,3 +1,11 @@
+// 使用 @forward 替代 @import
+@forward './mixins';
+@forward './components';
+
+// 导入主题样式
+@import './themes/neumorphism.scss';
+@import './themes/ghibli.scss';
+
 // 全局 SCSS 变量
 :root {
   // 主色调
@@ -108,9 +116,3 @@ $screen-xxl: 1600px;
     @content;
   }
 }
-
-// 导入 mixins
-@import './mixins';
-
-// 导入组件样式
-@import './components';
