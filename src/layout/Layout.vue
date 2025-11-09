@@ -1,25 +1,30 @@
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue'
-import LayoutHead from './LayoutHead.vue'
-import LayoutFooter from './LayoutFooter.vue'
-import { Layout as AntLayout, LayoutSider, LayoutContent } from 'ant-design-vue'
-import LayoutMenu from './components/LayoutMenu.vue'
-import { DashboardOutlined, SettingOutlined, ToolOutlined, DatabaseOutlined } from '@ant-design/icons-vue'
-import { useAppStore } from '../store/app'
-import { useMenuStore } from '../store/menu'
-import { useRouter } from 'vue-router'
+import { ref, reactive, computed, onMounted } from 'vue';
+import LayoutHead from './LayoutHead.vue';
+import LayoutFooter from './LayoutFooter.vue';
+import { Layout as AntLayout, LayoutSider, LayoutContent } from 'ant-design-vue';
+import LayoutMenu from './components/LayoutMenu.vue';
+import {
+  DashboardOutlined,
+  SettingOutlined,
+  ToolOutlined,
+  DatabaseOutlined,
+} from '@ant-design/icons-vue';
+import { useAppStore } from '../store/app';
+import { useMenuStore } from '../store/menu';
+import { useRouter } from 'vue-router';
 
 // 使用 store
-const appStore = useAppStore()
-const menuStore = useMenuStore()
-const router = useRouter()
+const appStore = useAppStore();
+const menuStore = useMenuStore();
+const router = useRouter();
 
 // 定义菜单数据
 const menuList = reactive([
   {
     key: 'dashboard',
     title: '仪表盘',
-    icon: DashboardOutlined
+    icon: DashboardOutlined,
   },
   {
     key: 'system',
@@ -28,17 +33,17 @@ const menuList = reactive([
     children: [
       {
         key: 'users',
-        title: '用户管理'
+        title: '用户管理',
       },
       {
         key: 'roles',
-        title: '角色管理'
+        title: '角色管理',
       },
       {
         key: 'settings',
-        title: '系统设置'
-      }
-    ]
+        title: '系统设置',
+      },
+    ],
   },
   {
     key: 'tools',
@@ -48,74 +53,77 @@ const menuList = reactive([
       {
         key: 'storage',
         title: '存储工具',
-        icon: DatabaseOutlined
+        icon: DatabaseOutlined,
       },
       {
         key: 'lodash',
         title: 'Lodash 工具',
-        icon: DatabaseOutlined
+        icon: DatabaseOutlined,
       },
       {
         key: 'utils',
         title: '通用工具',
-        icon: DatabaseOutlined
+        icon: DatabaseOutlined,
       },
       {
         key: 'validator',
         title: '验证工具',
-        icon: DatabaseOutlined
-      }
-    ]
-  }
-])
+        icon: DatabaseOutlined,
+      },
+    ],
+  },
+]);
 
 // 设置菜单列表到 store
 onMounted(() => {
   menuStore.setMenuList(menuList);
   console.log('菜单列表:', menuList);
-})
+});
 
 const handleMenuClick = (item: any) => {
-  console.log('点击菜单项:', item)
-  menuStore.setActiveMenuKey(item.key)
-  
+  console.log('点击菜单项:', item);
+  menuStore.setActiveMenuKey(item.key);
+
   // 根据菜单项导航到对应页面
   switch (item.key) {
     case 'dashboard':
-      router.push('/')
-      break
+      router.push('/');
+      break;
     case 'settings':
-      router.push('/settings')
-      break
+      router.push('/settings');
+      break;
     case 'lodash':
-      router.push('/lodash')
-      break
+      router.push('/lodash');
+      break;
     case 'utils':
-      router.push('/utils')
-      break
+      router.push('/utils');
+      break;
     case 'validator':
-      router.push('/validator')
-      break
+      router.push('/validator');
+      break;
+    case 'storage':
+      router.push('/storage');
+      break;
     default:
       // 处理子菜单项
       if (item.key) {
-        router.push(`/${item.key}`)
+        router.push(`/${item.key}`);
       }
-      console.log('未找到对应的路由:', item.key)
+      console.log('未找到对应的路由:', item.key);
   }
-}
+};
 
 const layoutMainClass = computed(() => {
-  return ['layout-main', { collapsed: appStore.collapsed }]
-})
+  return ['layout-main', { collapsed: appStore.collapsed }];
+});
 </script>
 
 <template>
   <AntLayout class="layout-container">
-    <LayoutSider 
-      v-model:collapsed="appStore.collapsed" 
-      :trigger="null" 
-      collapsible 
+    <LayoutSider
+      v-model:collapsed="appStore.collapsed"
+      :trigger="null"
+      collapsible
       width="256"
       :theme="appStore.getTheme"
       class="layout-sider"
@@ -125,23 +133,23 @@ const layoutMainClass = computed(() => {
         <h1 v-else>FDL</h1>
       </div>
       <div class="layout-menu">
-        <LayoutMenu 
-          :menu-list="menuStore.getMenuList" 
-          :collapsed="appStore.collapsed" 
-          @click="handleMenuClick" 
+        <LayoutMenu
+          :menu-list="menuStore.getMenuList"
+          :collapsed="appStore.collapsed"
+          @click="handleMenuClick"
         />
       </div>
     </LayoutSider>
-    
+
     <AntLayout :class="layoutMainClass">
       <LayoutHead v-model:collapsed="appStore.collapsed" />
-      
+
       <LayoutContent class="layout-content">
         <div class="content-wrapper">
           <router-view />
         </div>
       </LayoutContent>
-      
+
       <LayoutFooter />
     </AntLayout>
   </AntLayout>
