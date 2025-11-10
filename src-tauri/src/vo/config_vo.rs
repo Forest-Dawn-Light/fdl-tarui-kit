@@ -1,6 +1,7 @@
 
 
 #[derive(serde::Deserialize)]
+#[derive(Clone)]
 pub struct ConfigVo {
     pub fullscreen: bool,
     pub start_at_login: bool,

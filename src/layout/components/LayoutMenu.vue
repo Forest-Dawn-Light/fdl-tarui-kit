@@ -11,11 +11,13 @@ import {
   SafetyCertificateOutlined,
   ExperimentOutlined,
 } from '@ant-design/icons-vue';
+import { useAppStore } from '@/store';
 
 // 使用 store 和 router
 const menuStore = useMenuStore();
 const router = useRouter();
 const route = useRoute();
+const appStore = useAppStore();
 
 // 定义菜单数据
 const menuData = computed<MenuItem[]>(() => [
@@ -114,7 +116,7 @@ const openKeys = computed(() => menuStore.getOpenKeys);
     v-model:selectedKeys="selectedKeys"
     v-model:openKeys="openKeys"
     mode="inline"
-    theme="dark"
+    :theme="appStore.getTheme"
     @click="handleMenuClick"
   >
     <template v-for="item in menuData" :key="item.key">
