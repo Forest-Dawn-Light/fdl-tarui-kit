@@ -23,9 +23,9 @@ export const useStorageStore = defineStore('storage', {
      * @param value 存储值
      * @param encrypt 是否加密存储
      */
-    setItem<T>(key: string, value: T, encrypt: boolean = true): StoreActionResult {
+    async setItem<T>(key: string, value: T, encrypt: boolean = true): Promise<StoreActionResult> {
       try {
-        storageUtils.setItem(key, value, encrypt);
+        await storageUtils.setItem(key, value, encrypt);
         return { success: true };
       } catch (error) {
         return { success: false, message: `设置存储项失败: ${error}` };
@@ -39,14 +39,14 @@ export const useStorageStore = defineStore('storage', {
      * @param decrypt 是否解密
      * @returns 存储值
      */
-    getItem<T>(
+    async getItem<T>(
       key: string,
       defaultValue: T | null = null,
       decrypt: boolean = true,
-    ): StoreActionResult<T | null> {
+    ): Promise<StoreActionResult<T | null>> {
       try {
-        const value = storageUtils.getItem<T>(key, defaultValue, decrypt);
-        return { success: true, data: value };
+        const value = await storageUtils.getItem<T>(key, defaultValue, decrypt);
+        return { success: true, data: value as T };
       } catch (error) {
         return { success: false, message: `获取存储项失败: ${error}` };
       }
@@ -56,9 +56,9 @@ export const useStorageStore = defineStore('storage', {
      * 删除存储项
      * @param key 存储键
      */
-    removeItem(key: string): StoreActionResult {
+    async removeItem(key: string): Promise<StoreActionResult> {
       try {
-        storageUtils.removeItem(key);
+        await storageUtils.removeItem(key);
         return { success: true };
       } catch (error) {
         return { success: false, message: `删除存储项失败: ${error}` };
@@ -68,9 +68,9 @@ export const useStorageStore = defineStore('storage', {
     /**
      * 清空所有存储项
      */
-    clear(): StoreActionResult {
+    async clear(): Promise<StoreActionResult> {
       try {
-        storageUtils.clear();
+        await storageUtils.clear();
         return { success: true };
       } catch (error) {
         return { success: false, message: `清空存储失败: ${error}` };
@@ -82,9 +82,9 @@ export const useStorageStore = defineStore('storage', {
      * @param key 存储键
      * @returns 是否存在
      */
-    hasItem(key: string): StoreActionResult<boolean> {
+    async hasItem(key: string): Promise<StoreActionResult<boolean>> {
       try {
-        const exists = storageUtils.hasItem(key);
+        const exists = await storageUtils.hasItem(key);
         return { success: true, data: exists };
       } catch (error) {
         return { success: false, message: `检查存储项失败: ${error}` };
@@ -95,9 +95,9 @@ export const useStorageStore = defineStore('storage', {
      * 获取所有存储项的键
      * @returns 键数组
      */
-    getAllKeys(): StoreActionResult<string[]> {
+    async getAllKeys(): Promise<StoreActionResult<string[]>> {
       try {
-        const keys = storageUtils.getAllKeys();
+        const keys = await storageUtils.getAllKeys();
         return { success: true, data: keys };
       } catch (error) {
         return { success: false, message: `获取存储键列表失败: ${error}` };
@@ -111,14 +111,14 @@ export const useStorageStore = defineStore('storage', {
      * @param expire 过期时间（毫秒）
      * @param encrypt 是否加密存储
      */
-    setItemWithExpire<T>(
+    async setItemWithExpire<T>(
       key: string,
       value: T,
       expire: number,
       encrypt: boolean = true,
-    ): StoreActionResult {
+    ): Promise<StoreActionResult> {
       try {
-        storageUtils.setItemWithExpire(key, value, expire, encrypt);
+        await storageUtils.setItemWithExpire(key, value, expire, encrypt);
         return { success: true };
       } catch (error) {
         return { success: false, message: `设置带过期时间的存储项失败: ${error}` };
@@ -132,14 +132,14 @@ export const useStorageStore = defineStore('storage', {
      * @param decrypt 是否解密
      * @returns 存储值
      */
-    getItemWithExpire<T>(
+    async getItemWithExpire<T>(
       key: string,
       defaultValue: T | null = null,
       decrypt: boolean = true,
-    ): StoreActionResult<T | null> {
+    ): Promise<StoreActionResult<T | null>> {
       try {
-        const value = storageUtils.getItemWithExpire<T>(key, defaultValue, decrypt);
-        return { success: true, data: value };
+        const value = await storageUtils.getItemWithExpire<T>(key, defaultValue, decrypt);
+        return { success: true, data: value as T };
       } catch (error) {
         return { success: false, message: `获取带过期时间的存储项失败: ${error}` };
       }

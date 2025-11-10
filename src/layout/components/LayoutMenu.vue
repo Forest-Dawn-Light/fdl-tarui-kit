@@ -1,35 +1,33 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useMenuStore } from '@/store/menu'
-import { useRouter, useRoute } from 'vue-router'
-import type { MenuItem } from '@/types/layout'
-import { 
-  HomeOutlined, 
-  SettingOutlined, 
+import { computed } from 'vue';
+import { useMenuStore } from '@/store/menu';
+import { useRouter, useRoute } from 'vue-router';
+import type { MenuItem } from '@/types/layout';
+import {
+  HomeOutlined,
+  SettingOutlined,
   DatabaseOutlined,
   ToolOutlined,
-  CheckCircleOutlined,
-  SaveOutlined,
   SafetyCertificateOutlined,
-  ExperimentOutlined
-} from '@ant-design/icons-vue'
+  ExperimentOutlined,
+} from '@ant-design/icons-vue';
 
 // 使用 store 和 router
-const menuStore = useMenuStore()
-const router = useRouter()
-const route = useRoute()
+const menuStore = useMenuStore();
+const router = useRouter();
+const route = useRoute();
 
 // 定义菜单数据
 const menuData = computed<MenuItem[]>(() => [
   {
     key: 'home',
     title: '首页',
-    icon: HomeOutlined
+    icon: HomeOutlined,
   },
   {
     key: 'settings',
     title: '系统设置',
-    icon: SettingOutlined
+    icon: SettingOutlined,
   },
   {
     key: 'utils',
@@ -38,31 +36,31 @@ const menuData = computed<MenuItem[]>(() => [
     children: [
       {
         key: 'lodash',
-        title: 'Lodash 工具'
+        title: 'Lodash 工具',
       },
       {
         key: 'utils',
-        title: '常用工具'
+        title: '常用工具',
       },
       {
         key: 'validator',
-        title: '验证工具'
+        title: '验证工具',
       },
       {
         key: 'storage',
-        title: '存储工具'
+        title: '存储工具',
       },
       {
         key: 'permission',
         title: '权限系统',
-        icon: SafetyCertificateOutlined
+        icon: SafetyCertificateOutlined,
       },
       {
         key: 'alias-test',
         title: '路径别名测试',
-        icon: ExperimentOutlined
-      }
-    ]
+        icon: ExperimentOutlined,
+      },
+    ],
   },
   {
     key: 'data',
@@ -71,27 +69,27 @@ const menuData = computed<MenuItem[]>(() => [
     children: [
       {
         key: 'data-list',
-        title: '数据列表'
+        title: '数据列表',
       },
       {
         key: 'data-analysis',
-        title: '数据分析'
-      }
-    ]
-  }
-])
+        title: '数据分析',
+      },
+    ],
+  },
+]);
 
 // 设置菜单列表
-menuStore.setMenuList(menuData.value)
+menuStore.setMenuList(menuData.value);
 
 // 处理菜单点击
 const handleMenuClick = ({ key }: { key: string }) => {
-  menuStore.setActiveMenuKey(key)
-  router.push({ name: getKeyToRouteMap()[key] || 'Home' })
-}
+  menuStore.setActiveMenuKey(key);
+  router.push({ name: getKeyToRouteMap()[key] || 'Home' });
+};
 
 // 菜单 key 到路由 name 的映射
-const getKeyToRouteMap = () => ({
+const getKeyToRouteMap = (): Record<string, string> => ({
   home: 'Home',
   settings: 'Settings',
   lodash: 'LodashDemo',
@@ -101,14 +99,14 @@ const getKeyToRouteMap = () => ({
   permission: 'PermissionDemo',
   'alias-test': 'AliasTest',
   'data-list': 'DataList',
-  'data-analysis': 'DataAnalysis'
-})
+  'data-analysis': 'DataAnalysis',
+});
 
 // 计算激活的菜单 key
-const selectedKeys = computed(() => [menuStore.getActiveMenuKey || route.name || 'home'])
+const selectedKeys = computed(() => [menuStore.getActiveMenuKey || route.name || 'home']);
 
 // 计算展开的菜单 keys
-const openKeys = computed(() => menuStore.getOpenKeys)
+const openKeys = computed(() => menuStore.getOpenKeys);
 </script>
 
 <template>

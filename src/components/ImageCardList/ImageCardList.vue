@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useImageCardList } from './hooks';
+
 interface ImageCard {
   id: string | number
   imageUrl: string
@@ -11,7 +13,7 @@ interface Props {
   imageHeight?: string
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   cards: () => [],
   imageHeight: '200px'
 })
@@ -20,6 +22,8 @@ withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   cardClick: [card: ImageCard]
 }>()
+
+const { cards, imageHeight } = useImageCardList(props);
 </script>
 
 <template>

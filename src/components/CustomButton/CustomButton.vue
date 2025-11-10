@@ -1,7 +1,7 @@
 <template>
   <button 
     class="custom-button" 
-    :class="[{ secondary, danger, disabled }, $attrs.class]" 
+    :class="[buttonClasses, $attrs.class]" 
     :disabled="disabled"
     v-bind="$attrs"
   >
@@ -10,21 +10,25 @@
 </template>
 
 <script setup lang="ts">
+import { useCustomButton } from './hooks';
+
 interface Props {
   secondary?: boolean
   danger?: boolean
   disabled?: boolean
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   secondary: false,
   danger: false,
   disabled: false
 })
+
+const { buttonClasses } = useCustomButton(props);
 </script>
 
 <style lang="scss" scoped>
-@import '../styles/global.scss';
+@import '../../styles/global.scss';
 
 .custom-button {
   padding: 8px 16px;

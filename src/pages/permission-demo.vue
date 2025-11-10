@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { usePermissionStore } from '@/store/permission';
-import { hasPermission, hasAnyPermission, hasAllPermissions, isPermissionEnabled, PERMISSIONS } from '@/utils/permissionUtils';
+import {
+  hasAnyPermission,
+  hasAllPermissions,
+  isPermissionEnabled,
+  PERMISSIONS,
+} from '@/utils/permissionUtils';
 
 // 使用 store
 const permissionStore = usePermissionStore();
@@ -16,18 +21,18 @@ const permissionEnabled = ref(false);
 onMounted(() => {
   // 检查权限系统是否启用
   permissionEnabled.value = isPermissionEnabled();
-  
+
   // 直接使用 store 方法
   canViewUser.value = permissionStore.hasPermission('user:view');
   canEditUser.value = permissionStore.hasPermission('user:edit');
-  
+
   // 使用工具函数
   hasAnyAdminPermission.value = hasAnyPermission(['role:view', 'role:edit']);
   hasAllUserPermissions.value = hasAllPermissions([
     PERMISSIONS.USER.VIEW,
     PERMISSIONS.USER.CREATE,
     PERMISSIONS.USER.EDIT,
-    PERMISSIONS.USER.DELETE
+    PERMISSIONS.USER.DELETE,
   ]);
 });
 
@@ -52,7 +57,7 @@ const togglePermissionSystem = () => {
 <template>
   <div class="permission-demo">
     <h2>权限系统演示</h2>
-    
+
     <div class="permission-status">
       <p>权限系统启用状态: {{ permissionEnabled }}</p>
       <p>权限系统当前状态: {{ permissionStore.isEnabled ? '已启用' : '已禁用' }}</p>
@@ -61,7 +66,7 @@ const togglePermissionSystem = () => {
       <p>拥有任意管理员权限: {{ hasAnyAdminPermission }}</p>
       <p>拥有所有用户管理权限: {{ hasAllUserPermissions }}</p>
     </div>
-    
+
     <div class="permission-actions">
       <button @click="addPermission">添加测试权限</button>
       <button @click="removePermission">移除测试权限</button>
@@ -71,19 +76,21 @@ const togglePermissionSystem = () => {
         {{ permissionStore.isEnabled ? '禁用' : '启用' }}权限系统
       </button>
     </div>
-    
+
     <div class="directive-examples">
       <h3>指令使用示例</h3>
-      
+
       <!-- 只有拥有 user:create 权限的用户才能看到这个按钮 -->
       <button v-permission="'user:create'">创建用户 (需要 user:create 权限)</button>
-      
+
       <!-- 没有权限时禁用而不是隐藏 -->
       <button v-permission.disabled="'user:delete'">删除用户 (需要 user:delete 权限)</button>
-      
+
       <!-- 拥有任意一个权限即可显示 -->
-      <button v-permission="['role:create', 'role:edit']">角色管理 (需要 role:create 或 role:edit 权限)</button>
-      
+      <button v-permission="['role:create', 'role:edit']">
+        角色管理 (需要 role:create 或 role:edit 权限)
+      </button>
+
       <!-- 当权限系统禁用时，这些按钮应该始终可见 -->
       <div v-if="!permissionStore.isEnabled" class="notice">
         <p>注意：权限系统当前已禁用，以上按钮的权限控制不会生效</p>

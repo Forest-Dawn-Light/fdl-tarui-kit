@@ -153,13 +153,13 @@ const getExpireResult = ref<any>(null)
 const allKeys = ref<string[]>([])
 
 // 基本操作方法
-const handleSetItem = () => {
+const handleSetItem = async () => {
   if (!form.key || !form.value) {
     message.warning('请输入键名和值')
     return
   }
   
-  const result = storageStore.setItem(form.key, form.value, false)
+  const result = await storageStore.setItem(form.key, form.value, false)
   if (result.success) {
     message.success('设置成功')
   } else {
@@ -167,13 +167,13 @@ const handleSetItem = () => {
   }
 }
 
-const handleGetItem = () => {
+const handleGetItem = async () => {
   if (!getKey.value) {
     message.warning('请输入键名')
     return
   }
   
-  const result = storageStore.getItem(getKey.value, null, false)
+  const result = await storageStore.getItem(getKey.value, null, false)
   if (result.success) {
     getResult.value = result.data
     message.success('获取成功')
@@ -182,13 +182,13 @@ const handleGetItem = () => {
   }
 }
 
-const handleRemoveItem = () => {
+const handleRemoveItem = async () => {
   if (!getKey.value) {
     message.warning('请输入键名')
     return
   }
   
-  const result = storageStore.removeItem(getKey.value)
+  const result = await storageStore.removeItem(getKey.value)
   if (result.success) {
     message.success('删除成功')
     getResult.value = null
@@ -198,13 +198,13 @@ const handleRemoveItem = () => {
 }
 
 // 加密存储方法
-const handleSetEncryptedItem = () => {
+const handleSetEncryptedItem = async () => {
   if (!encryptForm.key || !encryptForm.value) {
     message.warning('请输入键名和值')
     return
   }
   
-  const result = storageStore.setItem(encryptForm.key, encryptForm.value, true)
+  const result = await storageStore.setItem(encryptForm.key, encryptForm.value, true)
   if (result.success) {
     message.success('加密设置成功')
   } else {
@@ -212,13 +212,13 @@ const handleSetEncryptedItem = () => {
   }
 }
 
-const handleGetEncryptedItem = () => {
+const handleGetEncryptedItem = async () => {
   if (!getEncryptedKey.value) {
     message.warning('请输入键名')
     return
   }
   
-  const result = storageStore.getItem(getEncryptedKey.value, null, true)
+  const result = await storageStore.getItem(getEncryptedKey.value, null, true)
   if (result.success) {
     getEncryptedResult.value = result.data
     message.success('解密获取成功')
@@ -228,13 +228,13 @@ const handleGetEncryptedItem = () => {
 }
 
 // 过期时间方法
-const handleSetItemWithExpire = () => {
+const handleSetItemWithExpire = async () => {
   if (!expireForm.key || !expireForm.value || !expireForm.expire) {
     message.warning('请输入键名、值和过期时间')
     return
   }
   
-  const result = storageStore.setItemWithExpire(
+  const result = await storageStore.setItemWithExpire(
     expireForm.key, 
     expireForm.value, 
     expireForm.expire, 
@@ -248,13 +248,13 @@ const handleSetItemWithExpire = () => {
   }
 }
 
-const handleGetItemWithExpire = () => {
+const handleGetItemWithExpire = async () => {
   if (!getExpireKey.value) {
     message.warning('请输入键名')
     return
   }
   
-  const result = storageStore.getItemWithExpire(getExpireKey.value, null, false)
+  const result = await storageStore.getItemWithExpire(getExpireKey.value, null, false)
   if (result.success) {
     getExpireResult.value = result.data
     message.success('获取成功')
@@ -264,8 +264,8 @@ const handleGetItemWithExpire = () => {
 }
 
 // 工具方法
-const handleGetAllKeys = () => {
-  const result = storageStore.getAllKeys()
+const handleGetAllKeys = async () => {
+  const result = await storageStore.getAllKeys()
   if (result.success) {
     allKeys.value = result.data || []
     message.success('获取所有键成功')
@@ -274,8 +274,8 @@ const handleGetAllKeys = () => {
   }
 }
 
-const handleClear = () => {
-  const result = storageStore.clear()
+const handleClear = async () => {
+  const result = await storageStore.clear()
   if (result.success) {
     message.success('清空所有存储成功')
     allKeys.value = []

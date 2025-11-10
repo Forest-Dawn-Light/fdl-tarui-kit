@@ -26,8 +26,15 @@ tauri-plugin-fs = "2"
 tauri-plugin-log = "2"
 tauri-plugin-os = "2"
 tauri-plugin-store = "2"
+chrono="0.4"
+dotenv = "0.15"
+uuid = { version = "1", features = ["v4"] }
+log = "0.4.28"
+toml = "0.9"
+config = "0.15.18"
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-autostart = "2"
+tauri-plugin-single-instance = "2"
 tauri-plugin-updater = "2"
 

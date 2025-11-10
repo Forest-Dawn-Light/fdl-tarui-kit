@@ -9,28 +9,30 @@ let errorFn: (message: string) => Promise<void>;
 let attachConsoleFn: () => Promise<void>;
 
 if (isTauri) {
-  import('@tauri-apps/plugin-log').then((log) => {
-    traceFn = log.trace;
-    infoFn = log.info;
-    debugFn = log.debug;
-    warnFn = log.warn;
-    errorFn = log.error;
-    attachConsoleFn = log.attachConsole;
-    
-    // 尝试附加控制台
-    attachConsoleFn().catch((err) => {
-      console.warn('Failed to attach Tauri console:', err);
+  import('@tauri-apps/plugin-log')
+    .then((log) => {
+      traceFn = log.trace;
+      infoFn = log.info;
+      debugFn = log.debug;
+      warnFn = log.warn;
+      errorFn = log.error;
+      // attachConsoleFn = log.attachConsole;
+
+      // 尝试附加控制台
+      attachConsoleFn().catch((err) => {
+        console.warn('Failed to attach Tauri console:', err);
+      });
+    })
+    .catch((err) => {
+      console.warn('Failed to load Tauri log plugin:', err);
+      // Fallback to console
+      traceFn = (message: string) => Promise.resolve(console.log(`[TRACE] ${message}`));
+      infoFn = (message: string) => Promise.resolve(console.info(`[INFO] ${message}`));
+      debugFn = (message: string) => Promise.resolve(console.debug(`[DEBUG] ${message}`));
+      warnFn = (message: string) => Promise.resolve(console.warn(`[WARN] ${message}`));
+      errorFn = (message: string) => Promise.resolve(console.error(`[ERROR] ${message}`));
+      attachConsoleFn = () => Promise.resolve();
     });
-  }).catch((err) => {
-    console.warn('Failed to load Tauri log plugin:', err);
-    // Fallback to console
-    traceFn = (message: string) => Promise.resolve(console.log(`[TRACE] ${message}`));
-    infoFn = (message: string) => Promise.resolve(console.info(`[INFO] ${message}`));
-    debugFn = (message: string) => Promise.resolve(console.debug(`[DEBUG] ${message}`));
-    warnFn = (message: string) => Promise.resolve(console.warn(`[WARN] ${message}`));
-    errorFn = (message: string) => Promise.resolve(console.error(`[ERROR] ${message}`));
-    attachConsoleFn = () => Promise.resolve();
-  });
 } else {
   // 在浏览器环境中使用console
   traceFn = (message: string) => Promise.resolve(console.log(`[TRACE] ${message}`));

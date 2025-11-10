@@ -8,6 +8,9 @@
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
+    "tarui:dev": "tauri dev",
+    "tarui:build": "tauri build",
+    "tarui:test": "vitest",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run"
@@ -36,6 +39,7 @@
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
     "@tauri-apps/cli": "^2",
+    "@types/jsdom": "^27.0.0",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^24.7.2",
     "@typescript-eslint/eslint-plugin": "^8.46.1",

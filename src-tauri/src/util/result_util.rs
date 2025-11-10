@@ -9,7 +9,7 @@ impl<T> ResultUtil<T> {
         let result = IpcResult {
             result: Some(result),
             data: Some(data),
-        }
+        };
 
         result.success = true;
         result.message = "success".to_string();

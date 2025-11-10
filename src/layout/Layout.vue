@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue';
+import { reactive, computed, onMounted } from 'vue';
 import LayoutHead from './LayoutHead.vue';
 import LayoutFooter from './LayoutFooter.vue';
 import { Layout as AntLayout, LayoutSider, LayoutContent } from 'ant-design-vue';

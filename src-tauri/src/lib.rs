@@ -1,9 +1,11 @@
+use tauri_plugin_autostart::ManagerExt;
 use tauri_plugin_log::{Target, TargetKind};
 
 pub mod event;
-pub mod util;
 pub mod services;
+pub mod util;
 pub mod vo;
+
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -13,6 +15,7 @@ fn greet(name: &str) -> String {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        // .plugin(tauri_plugin_single_instance::init(|app, args, cwd| {}))
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_log::Builder::new().build())

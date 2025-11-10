@@ -1,27 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue'
-import { useAppStore } from '../store/app'
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
+import { useAppStore } from '../store/app';
 
-const appStore = useAppStore()
-
-interface Props {
-  collapsed?: boolean
-}
-
-interface Emits {
-  (e: 'update:collapsed', collapsed: boolean): void
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  collapsed: false
-})
-
-const emit = defineEmits<Emits>()
+const appStore = useAppStore();
 
 const toggleCollapsed = () => {
-  appStore.toggleSiderCollapsed()
-}
+  appStore.toggleSiderCollapsed();
+};
 </script>
 
 <template>
