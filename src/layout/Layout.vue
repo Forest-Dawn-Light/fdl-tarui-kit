@@ -10,8 +10,8 @@ import {
   ToolOutlined,
   DatabaseOutlined,
 } from '@ant-design/icons-vue';
-import { useAppStore } from '../store/app';
-import { useMenuStore } from '../store/menu';
+import { useAppStore } from '@/store';
+import { useMenuStore } from '@/store';
 import { useRouter } from 'vue-router';
 
 // 使用 store

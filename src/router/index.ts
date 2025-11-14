@@ -6,6 +6,7 @@ import UtilsDemo from '../pages/utils-demo.vue';
 import ValidatorDemo from '../pages/validator-demo.vue';
 import StorageDemo from '../pages/storage-demo.vue';
 import PermissionDemo from '../pages/permission-demo.vue';
+import Login from '../pages/login.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -42,6 +43,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/permission',
     name: 'PermissionDemo',
     component: PermissionDemo,
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
   },
 ];
 
